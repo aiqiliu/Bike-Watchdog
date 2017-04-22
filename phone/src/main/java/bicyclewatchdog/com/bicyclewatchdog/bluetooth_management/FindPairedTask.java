@@ -13,8 +13,8 @@ public class FindPairedTask extends AsyncTask {
     private String targetMac;
     public FindPairedTask(String targetMAC) {
         targetMac = targetMAC;
+        //TODO: Add callback parameters for success and failure
     }
-
 
     @Override
     protected Object doInBackground(Object[] params) {
