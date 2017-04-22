@@ -5,10 +5,12 @@ import android.location.LocationListener;
 import android.os.Bundle;
 
 /**
- * Created by William on 4/22/2017.
+ * Created by William on 4/22/2017
  */
 
 public class WatchdogListener implements LocationListener {
+    private static final String TAG = "LocationListener";
+
     @Override
     public void onLocationChanged(Location location) {
         // Todo: implement to begin bluetooth operiations
