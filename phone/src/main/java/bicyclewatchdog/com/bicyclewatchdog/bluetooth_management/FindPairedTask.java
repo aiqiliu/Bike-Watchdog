@@ -11,9 +11,13 @@ public class FindPairedTask extends AsyncTask {
     private static final String TAG = "FindPairedTask";
 
     private String targetMac;
-    public FindPairedTask(String targetMAC) {
+    private Runnable onSuccess;
+    private Runnable onFailure;
+
+    public FindPairedTask(String targetMAC, Runnable onSuccess, Runnable onFailure) {
         targetMac = targetMAC;
-        //TODO: Add callback parameters for success and failure
+        this.onSuccess = onSuccess;
+        this.onFailure = onFailure;
     }
 
     @Override
