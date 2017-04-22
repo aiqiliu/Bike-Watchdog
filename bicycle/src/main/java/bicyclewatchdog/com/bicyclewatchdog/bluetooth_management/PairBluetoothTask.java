@@ -18,6 +18,7 @@ public class PairBluetoothTask extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] params) {
         Log.e(TAG, "Not yet implemented");
+        // TODO: on successful pairing, permanently store MAC address in a file
         return null;
     }
 }
