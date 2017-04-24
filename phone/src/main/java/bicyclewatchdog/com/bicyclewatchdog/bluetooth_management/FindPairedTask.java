@@ -7,7 +7,7 @@ import android.os.AsyncTask;
  * Created by William on 4/22/2017.
  */
 
-public class FindPairedTask extends AsyncTask {
+class FindPairedTask extends AsyncTask {
     private static final String TAG = "FindPairedTask";
 
     private String targetMac;
@@ -23,6 +23,9 @@ public class FindPairedTask extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] params) {
         // TODO: try to connect to device with mac targetMac
+
+        // TODO: on success, pause gps
+        // TODO: on failure, send message
         return null;
     }
 }
