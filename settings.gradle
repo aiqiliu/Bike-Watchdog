@@ -1,1 +1,1 @@
-include ':phone', ':bicycle'
+include ':phone'
