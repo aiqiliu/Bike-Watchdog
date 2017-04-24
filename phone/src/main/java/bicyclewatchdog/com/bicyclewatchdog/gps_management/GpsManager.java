@@ -2,6 +2,7 @@ package bicyclewatchdog.com.bicyclewatchdog.gps_management;
 
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Log;
 
 import bicyclewatchdog.com.bicyclewatchdog.bluetooth_management.CustomBluetoothManager;
 
@@ -24,6 +25,7 @@ public class GpsManager {
         mBluetoothManager = btManager;
         //TODO: initialize mLocationManager
         //TODO: initialize watchdogListener
+        Log.e(TAG, "Not yet implemented");
     }
 
     /**
@@ -33,6 +35,7 @@ public class GpsManager {
     public boolean resumeGPS() {
         //TODO: set WatchdogListener to run every time threshold is met
         // See https://developer.android.com/guide/topics/location/strategies.html
+        Log.e(TAG, "Not yet implemented");
         return false;
     }
 
@@ -42,6 +45,7 @@ public class GpsManager {
      */
     public boolean pauseGPS() {
         //TODO: unregister watchdogListener
+        Log.e(TAG, "Not yet implemented");
         return false;
     }
 
@@ -51,6 +55,7 @@ public class GpsManager {
      */
     public void updateThreshold(float newThreshold) {
         //TODO: update this.threshold and reregister listener if needed
+        Log.e(TAG, "Not yet implemented");
     }
 
     /**
@@ -61,5 +66,6 @@ public class GpsManager {
         //TODO: search for paired device
         // Feel free to move this into the WatchdogListener or make into
         // a runnable passed into WatchdogListener as needed
+        Log.e(TAG, "Not yet implemented");
     }
 }

@@ -13,6 +13,7 @@ class PairBluetoothTask extends AsyncTask {
 
     public PairBluetoothTask() {
         //TODO: update with parameters needed to run pairing (i.e. target mac address, context)
+        Log.e(TAG, "Not yet implemented");
     }
 
     @Override
@@ -21,6 +22,7 @@ class PairBluetoothTask extends AsyncTask {
         // TODO: check if already paired
         // TODO: pair if needed
         // TODO: store paired mac in file (coordinate with group)
+        Log.e(TAG, "Not yet implemented");
         return null;
     }
 }

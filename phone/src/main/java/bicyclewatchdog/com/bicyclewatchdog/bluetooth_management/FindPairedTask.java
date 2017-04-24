@@ -1,6 +1,7 @@
 package bicyclewatchdog.com.bicyclewatchdog.bluetooth_management;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 /**
  * Searches for the device if paired
@@ -18,6 +19,7 @@ class FindPairedTask extends AsyncTask {
         targetMac = targetMAC;
         this.onSuccess = onSuccess;
         this.onFailure = onFailure;
+        Log.e(TAG, "Not yet implemented");
     }
 
     @Override
@@ -26,6 +28,7 @@ class FindPairedTask extends AsyncTask {
 
         // TODO: on success, pause gps
         // TODO: on failure, send message
+        Log.e(TAG, "Not yet implemented");
         return null;
     }
 }
