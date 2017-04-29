@@ -7,4 +7,6 @@
     <string name="bike_button_text">Bike</string>
     <string name="phone_button_text">Phone</string>
     <string name="phone_prompt">Phone #:</string>
+    <string name="pair_button_text">Pair</string>
+    <string name="app_function">App function:</string>
 </resources>
