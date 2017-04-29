@@ -2,6 +2,7 @@ package bicyclewatchdog.com.bicyclewatchdog;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.RadioGroup;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -14,6 +15,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Set the change listener for the radio group
+        ((RadioGroup) this.findViewById(R.id.radioGroupType))
+                .setOnCheckedChangeListener(new TypeChangedListener());
     }
 
 }
