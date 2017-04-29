@@ -29,6 +29,7 @@
             android:layout_weight="2"/>
 
         <EditText
+            android:id="@+id/editTextThreshold"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="numberDecimal"
@@ -48,4 +49,35 @@
             android:text="@string/threshold_units"/>
 
     </LinearLayout>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal">
+
+        <RadioButton
+            android:id="@+id/radioButtonBike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/bike_button_text" />
+
+        <!-- TODO: center the radio buttons in a way that looks nice -->
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <RadioButton
+            android:id="@+id/radioButtonPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/phone_button_text" />
+
+    </RadioGroup>
+
+
 </LinearLayout>

@@ -4,4 +4,6 @@
     <string name="threshold">Threshold: </string>
     <string name="threshold_units">meters</string>
     <string name="default_threshold">10</string>
+    <string name="bike_button_text">Bike</string>
+    <string name="phone_button_text">Phone</string>
 </resources>
