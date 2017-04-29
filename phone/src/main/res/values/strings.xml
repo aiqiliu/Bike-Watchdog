@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BicycleWatchdog</string>
+    <string name="appname">BicycleWatchdog</string>
+    <string name="threshold">Threshold: </string>
+    <string name="threshold_units">meters</string>
+    <string name="default_threshold">10</string>
 </resources>
