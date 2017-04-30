@@ -9,7 +9,7 @@ import android.widget.RadioGroup;
  * Created by William on 4/29/2017.
  */
 
-public class TypeChangedListener implements RadioGroup.OnCheckedChangeListener {
+class TypeChangedListener implements RadioGroup.OnCheckedChangeListener {
     private static final String TAG = "TypeChangedListener";
     @Override
     public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
