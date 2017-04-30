@@ -20,8 +20,8 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
     WatchdogService mService;
 
     //TODO: Add IPC to communicate with service
-    //TODO: Add buttons to pair to bike
     //TODO: Add option to turn off gps polling
+    //TODO: Unfocus on edittext when finish button pressed
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
