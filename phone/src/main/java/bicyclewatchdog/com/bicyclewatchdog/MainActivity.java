@@ -23,6 +23,10 @@ public class MainActivity extends AppCompatActivity {
         // Set the change listener for the threshold
         this.findViewById(R.id.editTextThreshold)
                 .setOnFocusChangeListener(new ThresholdChangedListener());
+
+        // Set the change listener for phone number
+        this.findViewById(R.id.editTextPhone)
+                .setOnFocusChangeListener(new PhoneNumberChangedListener());
     }
 
 }
