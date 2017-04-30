@@ -32,7 +32,6 @@ public class WatchdogService extends Service {
 
     }
 
-    //TODO: Add IPC to receive new instructions from MainActivity
     //TODO: Start/stop gps based off instructions from MainActivity
     //TODO: Update mGpsManager with new threshold based off IPC from MainActivity
 
