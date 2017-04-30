@@ -19,6 +19,10 @@ public class MainActivity extends AppCompatActivity {
         // Set the change listener for the radio group
         ((RadioGroup) this.findViewById(R.id.radioGroupType))
                 .setOnCheckedChangeListener(new TypeChangedListener());
+
+        // Set the change listener for the threshold
+        this.findViewById(R.id.editTextThreshold)
+                .setOnFocusChangeListener(new ThresholdChangedListener());
     }
 
 }
