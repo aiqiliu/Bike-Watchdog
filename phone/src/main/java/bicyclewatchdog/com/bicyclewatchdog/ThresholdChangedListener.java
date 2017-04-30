@@ -9,7 +9,7 @@ import android.view.View;
  * Created by William on 4/30/2017.
  */
 
-public class ThresholdChangedListener implements View.OnFocusChangeListener {
+class ThresholdChangedListener implements View.OnFocusChangeListener {
     private static final String TAG = "ThresholdChanged";
 
 
