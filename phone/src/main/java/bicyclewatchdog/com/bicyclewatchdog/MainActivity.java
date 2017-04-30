@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioGroup;
 
-public class MainActivity extends AppCompatActivity implements WatchdogService.Callbacks{
+public class MainActivity extends AppCompatActivity implements WatchdogService.Callbacks {
     private static final String TAG = "MainActivity";
 
     // Reference to the service
@@ -28,15 +30,15 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
 
         // Set the change listener for the radio group
         ((RadioGroup) this.findViewById(R.id.radioGroupType))
-                .setOnCheckedChangeListener(new TypeChangedListener());
+                .setOnCheckedChangeListener(typeChangedListener);
 
         // Set the change listener for the threshold
         this.findViewById(R.id.editTextThreshold)
-                .setOnFocusChangeListener(new ThresholdChangedListener());
+                .setOnFocusChangeListener(thresholdChangedListener);
 
         // Set the change listener for phone number
         this.findViewById(R.id.editTextPhone)
-                .setOnFocusChangeListener(new PhoneNumberChangedListener());
+                .setOnFocusChangeListener(phoneNumberChangedListener);
 
         Intent serviceIntent = new Intent(this, WatchdogService.class);
         bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
@@ -48,11 +50,6 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
         unbindService(mServiceConnection);
     }
 
-
-    public void onPairClicked(View v) {
-        Log.v(TAG, "Pair clicked.");
-
-    }
 
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -69,4 +66,51 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
             mService = null;
         }
     };
+
+
+    /* ***************** UI LISTENERS ********************** */
+    /**
+     * Listener to handle changes of the focus on editTextPhoneNumber
+     */
+    private View.OnFocusChangeListener phoneNumberChangedListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (!hasFocus) {
+                Log.v(TAG, "Phone number changed to: " + ((EditText) v).getText());
+            }
+        }
+    };
+
+    /**
+     * Listener to handle changes of the focus on editTextThreshold
+     */
+    private View.OnFocusChangeListener thresholdChangedListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (!hasFocus) {
+                // Focus lost on the threshold EditText. Update service
+                // TODO: Update constructor to get the context from view and talk to service
+                Log.v(TAG, "Lost focus on " + v.getId());
+                Log.v(TAG, "Threshold changed to " + ((EditText) v).getText());
+            }
+        }
+    };
+
+    /**
+     * Listener to handle changes of the type of app function
+     */
+    private RadioGroup.OnCheckedChangeListener typeChangedListener = new RadioGroup.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+            // TODO: Implement this.
+            Log.v(TAG, "Type changed to: " + group.getCheckedRadioButtonId());
+        }
+    };
+
+    /**
+     * Handles the pairing button clicked
+     */
+    public void onPairClicked(View v) {
+        Log.v(TAG, "Pair clicked.");
+    }
 }
