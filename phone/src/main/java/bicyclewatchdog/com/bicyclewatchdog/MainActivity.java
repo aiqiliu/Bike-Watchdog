@@ -76,7 +76,8 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
             if (!hasFocus) {
-                Log.v(TAG, "Phone number changed to: " + ((EditText) v).getText());
+                String phoneNumber = ((EditText) v).getText().toString();
+                mService.updatePhone(phoneNumber);
             }
         }
     };
