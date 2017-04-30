@@ -77,8 +77,8 @@ public class WatchdogService extends Service {
      * Updates the type that the messenger uses to send messages
      * @param type BICYCLE or PHONE
      */
-    public void updateType(int type) {
-        Log.v(TAG, "Updating type to " + Integer.toString(type));
+    public void updateType(FunctionType type) {
+        Log.v(TAG, "Updating type to " + type.toString());
         // TODO: define type enum
         // TODO: implement this
     }
@@ -88,5 +88,10 @@ public class WatchdogService extends Service {
         // TODO: implement updatePhone
     }
 
+    public enum FunctionType {
+        BICYCLE,
+        PHONE,
+        UNKNOWN
+    }
 
 }

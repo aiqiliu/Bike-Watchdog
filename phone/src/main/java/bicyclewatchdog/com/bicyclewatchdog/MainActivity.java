@@ -102,8 +102,18 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
     private RadioGroup.OnCheckedChangeListener typeChangedListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-            // TODO: Implement this.
-            Log.v(TAG, "Type changed to: " + findViewById(group.getCheckedRadioButtonId()).getId());
+            WatchdogService.FunctionType type;
+
+            if (group.getCheckedRadioButtonId() == R.id.radioButtonBike) {
+                type = WatchdogService.FunctionType.BICYCLE;
+            } else if (group.getCheckedRadioButtonId() == R.id.radioButtonPhone) {
+                type = WatchdogService.FunctionType.PHONE;
+            } else {
+                Log.e(TAG, "Unknown function type selected!");
+                type = WatchdogService.FunctionType.UNKNOWN;
+            }
+
+            mService.updateType(type);
         }
     };
 
