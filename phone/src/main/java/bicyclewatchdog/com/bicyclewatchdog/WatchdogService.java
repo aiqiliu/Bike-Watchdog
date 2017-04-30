@@ -79,7 +79,6 @@ public class WatchdogService extends Service {
      */
     public void updateType(FunctionType type) {
         Log.v(TAG, "Updating type to " + type.toString());
-        // TODO: define type enum
         // TODO: implement this
     }
 

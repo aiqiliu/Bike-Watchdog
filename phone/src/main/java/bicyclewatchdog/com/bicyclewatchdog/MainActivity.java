@@ -89,9 +89,8 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
         public void onFocusChange(View v, boolean hasFocus) {
             if (!hasFocus) {
                 // Focus lost on the threshold EditText. Update service
-                // TODO: Update constructor to get the context from view and talk to service
-                Log.v(TAG, "Lost focus on " + v.getId());
-                Log.v(TAG, "Threshold changed to " + ((EditText) v).getText());
+                int threshold = Integer.parseInt(((EditText) v).getText().toString());
+                mService.updateThreshold(threshold);
             }
         }
     };
