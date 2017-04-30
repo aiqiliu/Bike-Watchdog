@@ -2,6 +2,7 @@ package bicyclewatchdog.com.bicyclewatchdog;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 /**
  * Class that watches for loss of focus in the threshold EditText
@@ -19,6 +20,7 @@ class ThresholdChangedListener implements View.OnFocusChangeListener {
             // Focus lost on the threshold EditText. Update service
             // TODO: Update constructor to get the context from view and talk to service
             Log.v(TAG, "Lost focus on " + v.getId());
+            Log.v(TAG, "Threshold changed to " + ((EditText) v).getText());
         }
     }
 }
