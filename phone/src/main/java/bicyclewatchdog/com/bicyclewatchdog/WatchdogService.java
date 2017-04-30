@@ -26,9 +26,9 @@ public class WatchdogService extends Service {
 
     public WatchdogService() {
         // Init managers
-        btManager = new CustomBluetoothManager(getApplicationContext(), "asdf");
-        mGpsManager = new GpsManager(btManager);
-        messageManager = new MessageManager();
+//        btManager = new CustomBluetoothManager(getApplicationContext(), "asdf");
+//        mGpsManager = new GpsManager(btManager);
+//        messageManager = new MessageManager();
 
     }
 

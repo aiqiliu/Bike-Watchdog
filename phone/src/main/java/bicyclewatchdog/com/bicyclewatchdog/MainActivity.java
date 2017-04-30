@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
         @Override
         public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
             // TODO: Implement this.
-            Log.v(TAG, "Type changed to: " + group.getCheckedRadioButtonId());
+            Log.v(TAG, "Type changed to: " + findViewById(group.getCheckedRadioButtonId()).getId());
         }
     };
 
