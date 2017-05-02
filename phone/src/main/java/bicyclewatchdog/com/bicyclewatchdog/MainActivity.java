@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements WatchdogService.Callbacks {
     private static final String TAG = "MainActivity";
@@ -122,5 +123,16 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
      */
     public void onPairClicked(View v) {
         Log.v(TAG, "Pair clicked.");
+    }
+
+    /**
+     * Handles the send message button clicked
+     */
+    public void onSendMessageClicked(View v) {
+        String phoneNumber = ((EditText) findViewById(R.id.editTextPhone)).getText().toString();
+
+        Toast.makeText(this, "Sending message to " + phoneNumber, Toast.LENGTH_SHORT).show();
+
+        mService.sendTestMessage(phoneNumber);
     }
 }

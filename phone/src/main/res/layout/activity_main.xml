@@ -139,4 +139,15 @@
         android:onClick="onPairClicked"
         android:text="@string/pair_button_text"/>
 
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send message"
+        android:onClick="onSendMessageClicked"/>
 </LinearLayout>

@@ -81,6 +81,11 @@ public class WatchdogService extends Service {
         // TODO: implement this
     }
 
+    public void sendTestMessage(String phoneNumber) {
+        messageManager.setPhoneNumber(phoneNumber);
+        messageManager.sendMessage("Test message.");
+    }
+
     public void updatePhone(String number) {
         Log.v(TAG, "Updating phone to " + number);
         // TODO: implement updatePhone
