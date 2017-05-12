@@ -28,7 +28,7 @@ public class WatchdogService extends Service {
         // Init managers
 //        btManager = new CustomBluetoothManager(getApplicationContext(), "asdf");
 //        mGpsManager = new GpsManager(btManager);
-//        messageManager = new MessageManager();
+        messageManager = new MessageManager();
 
     }
 
@@ -83,6 +83,7 @@ public class WatchdogService extends Service {
 
     public void sendTestMessage(String phoneNumber) {
         messageManager.setPhoneNumber(phoneNumber);
+        messageManager.setTextMsg("Hello, World!");
         messageManager.sendMessage("Test message.");
     }
 

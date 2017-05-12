@@ -1,12 +1,15 @@
 package bicyclewatchdog.com.bicyclewatchdog;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.IdRes;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements WatchdogService.Callbacks {
     private static final String TAG = "MainActivity";
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
 
     // Reference to the service
     WatchdogService mService;
@@ -28,6 +32,10 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.SEND_SMS},
+                MY_PERMISSIONS_REQUEST_SEND_SMS);
 
         // Set the change listener for the radio group
         ((RadioGroup) this.findViewById(R.id.radioGroupType))
@@ -50,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
         super.onDestroy();
         unbindService(mServiceConnection);
     }
-
 
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -135,4 +142,15 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
 
         mService.sendTestMessage(phoneNumber);
     }
+
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_SEND_SMS: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                }
+            }
+        }
+    }
+
 }

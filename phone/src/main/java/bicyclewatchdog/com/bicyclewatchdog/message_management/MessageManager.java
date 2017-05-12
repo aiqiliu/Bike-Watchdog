@@ -1,13 +1,7 @@
 package bicyclewatchdog.com.bicyclewatchdog.message_management;
 
-import android.content.Context;
-import android.util.Log;
 import android.telephony.SmsManager;
-import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.Manifest;
-import android.widget.Toast;
+import android.util.Log;
 /**
  * Class used to send SMS messages
  * Created by William on 4/24/2017.
@@ -58,6 +52,7 @@ public class MessageManager {
             Log.d("MSG", "msg sent");
         } catch (Exception ex) {
             Log.d("MSG", "msg failed to sent");
+            ex.printStackTrace();
         }
 
     }
