@@ -32,21 +32,18 @@ public class WatchdogService extends Service {
 
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-
-
-        mGpsManager = new GpsManager(btManager, this.getApplication().getApplicationContext());
-        mGpsManager.resumeGPS();
-        return START_STICKY;
-    }
-
     //TODO: Start/stop gps based off instructions from MainActivity
     //TODO: Update mGpsManager with new threshold based off IPC from MainActivity
 
     @Override
     public IBinder onBind(Intent intent) {
+        if (mGpsManager == null) {
+            mGpsManager = new GpsManager(btManager, this.getApplication().getApplicationContext());
+            mGpsManager.resumeGPS();
+        }
+
         return mBinder;
+
     }
 
     @Override

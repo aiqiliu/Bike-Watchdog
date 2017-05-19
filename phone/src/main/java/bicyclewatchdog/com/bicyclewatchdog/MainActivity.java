@@ -39,11 +39,6 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
                         Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.INTERNET},
                 MY_PERMISSIONS_REQUEST_SEND_SMS);
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-//                            Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.INTERNET}
-//                    ,MY_PERMISSIONS_REQUEST_GPS);
-//        }
 
         // Set the change listener for the radio group
         ((RadioGroup) this.findViewById(R.id.radioGroupType))
@@ -59,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
 
         Intent serviceIntent = new Intent(this, WatchdogService.class);
         bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
-        startService(serviceIntent);
     }
 
     @Override
