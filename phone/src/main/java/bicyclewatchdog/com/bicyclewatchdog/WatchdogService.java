@@ -27,9 +27,18 @@ public class WatchdogService extends Service {
     public WatchdogService() {
         // Init managers
 //        btManager = new CustomBluetoothManager(getApplicationContext(), "asdf");
-//        mGpsManager = new GpsManager(btManager);
         messageManager = new MessageManager();
 
+
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+
+        mGpsManager = new GpsManager(btManager, this.getApplication().getApplicationContext());
+        mGpsManager.resumeGPS();
+        return START_STICKY;
     }
 
     //TODO: Start/stop gps based off instructions from MainActivity

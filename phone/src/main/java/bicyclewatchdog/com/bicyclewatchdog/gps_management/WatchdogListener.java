@@ -14,7 +14,7 @@ public class WatchdogListener implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        // Todo: implement to begin bluetooth operiations
+        Log.v(TAG, "Location changed! " + location.toString());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package bicyclewatchdog.com.bicyclewatchdog.gps_management;
 
+import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
@@ -15,17 +16,20 @@ public class GpsManager {
     private LocationManager mLocationManager;
     private WatchdogListener watchdogListener;
     private float threshold = Float.MAX_VALUE;
+    private Context context;
     private CustomBluetoothManager mBluetoothManager;
 
     /**
      * Initializes GpsManager to update only when threshold is passed
      * @param btManager for use in onLocChanged()
      */
-    public GpsManager(CustomBluetoothManager btManager) {
+    public GpsManager(CustomBluetoothManager btManager, Context c) {
+        context = c;
         mBluetoothManager = btManager;
-        //TODO: initialize mLocationManager
-        //TODO: initialize watchdogListener
-        Log.e(TAG, "Not yet implemented");
+        mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+
+        watchdogListener = new WatchdogListener();
+
     }
 
     /**
@@ -35,8 +39,36 @@ public class GpsManager {
     public boolean resumeGPS() {
         //TODO: set WatchdogListener to run every time threshold is met
         // See https://developer.android.com/guide/topics/location/strategies.html
-        Log.e(TAG, "Not yet implemented");
-        return false;
+
+        Log.v(TAG, "Checking permissions");
+//        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+//                != PackageManager.PERMISSION_GRANTED)
+//            Log.v(TAG, "Fine location works");
+//        else
+//            Log.v(TAG, "Fine location doesnt work");
+//        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+//                != PackageManager.PERMISSION_GRANTED)
+//            Log.v(TAG, "Coarse location works");
+//        else
+//            Log.v(TAG, "Coarse location doesnt work");
+//
+//        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+//                != PackageManager.PERMISSION_GRANTED &&
+//                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+//                        != PackageManager.PERMISSION_GRANTED) {
+        try {
+            mLocationManager.requestLocationUpdates("gps", 5000, 0, watchdogListener);
+            Log.v(TAG, "Successfully requested location");
+            return true;
+        } catch (SecurityException e) {
+            Log.e(TAG, "Permissions required not received");
+            e.printStackTrace();
+            return false;
+        }
+//        }
+
+//        Log.e(TAG, "Failed to resume GPS");
+//        return false;
     }
 
     /**
@@ -44,9 +76,13 @@ public class GpsManager {
      * @return true if success, false if failure
      */
     public boolean pauseGPS() {
-        //TODO: unregister watchdogListener
-        Log.e(TAG, "Not yet implemented");
-        return false;
+        try {
+            mLocationManager.removeUpdates(watchdogListener);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
