@@ -1,5 +1,7 @@
 package bicyclewatchdog.com.bicyclewatchdog.bluetooth_management;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
