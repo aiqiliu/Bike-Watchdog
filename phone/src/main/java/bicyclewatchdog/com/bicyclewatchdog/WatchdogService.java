@@ -1,7 +1,12 @@
 package bicyclewatchdog.com.bicyclewatchdog;
 
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -23,15 +28,15 @@ public class WatchdogService extends Service {
     private GpsManager mGpsManager;
     private MessageManager messageManager;
 
+    // Representation of the mac address we are paired to
+    private String targetMac;
 
     public WatchdogService() {
         // Init managers
         messageManager = new MessageManager();
-        btManager = new CustomBluetoothManager(this, null);
+        btManager = new CustomBluetoothManager(this);
     }
 
-    //TODO: Start/stop gps based off instructions from MainActivity
-    //TODO: Update mGpsManager with new threshold based off IPC from MainActivity
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -39,6 +44,8 @@ public class WatchdogService extends Service {
             mGpsManager = new GpsManager(btManager, this.getApplication().getApplicationContext());
             mGpsManager.resumeGPS();
         }
+
+        bluetoothReciever.register();
 
         return mBinder;
     }
@@ -60,6 +67,48 @@ public class WatchdogService extends Service {
         }
     }
 
+    /* ********************* CALLBACK FOR BLUETOOTH DISCOVERY ************************** */
+
+    BluetoothReceiver bluetoothReciever = new BluetoothReceiver();
+
+    private class BluetoothReceiver extends BroadcastReceiver {
+        protected boolean isregistered = false;
+
+        public BluetoothReceiver() {
+            super();
+        }
+
+        public void register() {
+            if (!isregistered) {
+                IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+                filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+                getApplicationContext().registerReceiver(this, filter);
+                isregistered = true;
+            }
+        }
+
+        public void unregister() {
+            getApplicationContext().unregisterReceiver(this);
+            isregistered = false;
+        }
+
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Discovery has found a device. Get the BluetoothDevice
+                // object and its info from the Intent.
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                String deviceHardwareAddress = device.getAddress(); // MAC address
+                if (deviceHardwareAddress.equals(targetMac)) {
+                    btManager.stopSearch();
+                }
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                btManager.stopSearch();
+                messageManager.sendMessage("Your bike is moving!");
+            }
+        }
+    }
+
     /* ********** PUBLIC METHODS FOR BINDING ACTIVITY TO CALL ********* */
 
     public void registerCallbacks(Callbacks callbacks) {
@@ -68,6 +117,7 @@ public class WatchdogService extends Service {
 
     /**
      * Updates the threshold of the active gps manager
+     *
      * @param threshold in meters
      */
     public void updateThreshold(float threshold) {
@@ -78,6 +128,7 @@ public class WatchdogService extends Service {
 
     /**
      * Updates the type that the messenger uses to send messages
+     *
      * @param type BICYCLE or PHONE
      */
     public void updateType(FunctionType type) {

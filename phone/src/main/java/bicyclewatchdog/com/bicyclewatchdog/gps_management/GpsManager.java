@@ -113,12 +113,9 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
      * @param location of the device
      */
     protected void onLocChanged(Location location) {
-        //TODO: search for paired device
-        // Feel free to move this into the WatchdogListener or make into
-        // a runnable passed into WatchdogListener as needed
-        Log.e(TAG, "Not yet implemented");
+        Log.e(TAG, "Telling BTmanager to search for device");
+        mBluetoothManager.findPairedDevice();
     }
-
 
 
     /* ************************** GOOGLE API CALLBACKS ******************************** */

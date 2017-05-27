@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
                 .setOnFocusChangeListener(phoneNumberChangedListener);
 
         Intent serviceIntent = new Intent(this, WatchdogService.class);
-        bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        startService(serviceIntent);
+        bindService(serviceIntent, mServiceConnection, Context.BIND_IMPORTANT);
     }
 
     @Override

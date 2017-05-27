@@ -50,10 +50,15 @@ public class MessageManager {
         if (type == TYPE_PHONE) {
             Log.w(TAG, "Message request as type phone ignored");
         }
+
+        if (textmsg == "") {
+            textmsg = content;
+        }
+
         try {
             SmsManager smsManager = SmsManager.getDefault();
+            Log.d("MSG", "msg sent: " + textmsg);
             smsManager.sendTextMessage(phoneNumber, null, textmsg, null, null);
-            Log.d("MSG", "msg sent");
         } catch (Exception ex) {
             Log.d("MSG", "msg failed to sent");
             ex.printStackTrace();

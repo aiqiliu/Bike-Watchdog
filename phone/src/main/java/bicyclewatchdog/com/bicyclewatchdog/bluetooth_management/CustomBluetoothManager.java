@@ -11,12 +11,9 @@ import android.util.Log;
 
 public class CustomBluetoothManager {
     private static final String TAG = "CustomBluetoothManager";
-    private static final String MAC = "";
+    private BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 
-    public CustomBluetoothManager(Context applicationContext, String pairedMac) {
-        //TODO: Implement constructor as needed
-        // Contact person in charge of service/activity if you want to change the constructor
-        // to include useful things (i.e. Context or whatnot)
+    public CustomBluetoothManager(Context applicationContext) {
         //TODO: Make sure all this is right
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
@@ -27,15 +24,17 @@ public class CustomBluetoothManager {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             applicationContext.startActivity(enableBtIntent);
         }
-        //Log.e(TAG, "Not yet implemented");
     }
 
     public void findPairedDevice() {
-        //TODO: implement this... I don't really have suggestions so you have a lot of freedom
-        // Probably will have to run on background thread, so use AsyncTask FindPairedTask
-        Log.e(TAG, "Not yet implemented");
-
+        BluetoothAdapter.getDefaultAdapter().startDiscovery();
     }
 
-    //TODO: watch for lost connection (somehow). On connection lost, resume GPS
+    public void stopSearch() {
+        adapter.cancelDiscovery();
+    }
+
+    public void startSearch() {
+        adapter.startDiscovery();
+    }
 }
