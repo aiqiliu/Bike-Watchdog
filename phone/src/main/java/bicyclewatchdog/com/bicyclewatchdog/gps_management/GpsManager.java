@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -30,6 +31,7 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
     private boolean shouldResume = false;
     private Context context;
     private CustomBluetoothManager mBluetoothManager;
+    private long interval = java.util.concurrent.TimeUnit.MINUTES.toMillis(1);
 
     /**
      * Initializes GpsManager to update only when threshold is passed
@@ -70,7 +72,8 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
             // Create the location request
             LocationRequest mLocationRequest = LocationRequest.create()
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                    .setSmallestDisplacement(threshold);
+                    .setSmallestDisplacement(threshold)
+                    .setInterval(interval);
             // Request location updates
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
                     mLocationRequest, watchdogListener);
@@ -119,6 +122,8 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
         SharedPreferences preferences = context.getSharedPreferences(MyPreferences.NAME, Context.MODE_PRIVATE);
         preferences.edit().putString(MyPreferences.KEY_LOCATION, location.toString()).apply();
 
+
+        Toast.makeText(context, "GPS changed", Toast.LENGTH_SHORT).show();
         mBluetoothManager.findPairedDevice();
     }
 

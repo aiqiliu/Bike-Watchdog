@@ -116,19 +116,31 @@ public class WatchdogService extends Service {
             isregistered = false;
         }
 
+        private boolean isDeviceFound = false;
+
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Started searching, so we have not yet found the device
+                isDeviceFound = false;
+
                 // Discovery has found a device. Get the BluetoothDevice
                 // object and its info from the Intent.
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceHardwareAddress = device.getAddress(); // MAC address
+
+                Log.v(TAG, "FOUND DEVICE: " + deviceHardwareAddress);
                 if (deviceHardwareAddress.equals(targetMac)) {
+                    Log.e(TAG, "FOUND DEVICE!");
+                    isDeviceFound = true;
                     btManager.stopSearch();
+                } else {
+                    Log.v(TAG, "Device does not match target " + targetMac);
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 btManager.stopSearch();
-                messageManager.sendMessage("Your bike is moving!", WatchdogService.this);
+                if (!isDeviceFound)
+                    messageManager.sendMessage("Your bike is moving!", WatchdogService.this);
             }
         }
     }
