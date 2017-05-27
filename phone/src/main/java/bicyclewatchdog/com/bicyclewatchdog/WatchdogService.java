@@ -48,7 +48,7 @@ public class WatchdogService extends Service {
         }
         bluetoothReciever.register();
 
-        SharedPreferences preferences = getSharedPreferences(MyPreferences.LOCATION, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(MyPreferences.NAME, MODE_PRIVATE);
         String phoneNumber = preferences.getString(MyPreferences.KEY_PHONE, "");
         int type = preferences.getInt(MyPreferences.KEY_TYPE, MessageManager.TYPE_BICYCLE);
         float threshold = preferences.getFloat(MyPreferences.KEY_THRESHOLD, 10);
@@ -126,7 +126,7 @@ public class WatchdogService extends Service {
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 btManager.stopSearch();
-                messageManager.sendMessage("Your bike is moving!");
+                messageManager.sendMessage("Your bike is moving!", WatchdogService.this);
             }
         }
     }
@@ -146,7 +146,7 @@ public class WatchdogService extends Service {
         Log.v(TAG, "Updating threshold to " + Float.toString(threshold));
         mGpsManager.updateThreshold(threshold);
 
-        SharedPreferences preferences = getSharedPreferences(MyPreferences.LOCATION, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(MyPreferences.NAME, MODE_PRIVATE);
         preferences.edit().putFloat(MyPreferences.KEY_THRESHOLD, threshold).apply();
     }
 
@@ -171,21 +171,21 @@ public class WatchdogService extends Service {
         }
 
         messageManager.setType(intType);
-        SharedPreferences preferences = getSharedPreferences(MyPreferences.LOCATION, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(MyPreferences.NAME, MODE_PRIVATE);
         preferences.edit().putInt(MyPreferences.KEY_TYPE, intType).apply();
     }
 
     public void sendTestMessage(String phoneNumber) {
         messageManager.setPhoneNumber(phoneNumber);
         messageManager.setTextMsg("Hello, World!");
-        messageManager.sendMessage("Test message.");
+        messageManager.sendMessage("Test message.", this);
     }
 
     public void updatePhone(String number) {
         Log.v(TAG, "Updating phone to " + number);
         messageManager.setPhoneNumber(number);
 
-        SharedPreferences preferences = getSharedPreferences(MyPreferences.LOCATION, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(MyPreferences.NAME, MODE_PRIVATE);
         preferences.edit().putString(MyPreferences.KEY_PHONE, number).apply();
     }
 

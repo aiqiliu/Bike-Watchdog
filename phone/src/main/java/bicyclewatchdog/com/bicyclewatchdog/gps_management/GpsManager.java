@@ -1,6 +1,7 @@
 package bicyclewatchdog.com.bicyclewatchdog.gps_management;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import bicyclewatchdog.com.bicyclewatchdog.MyPreferences;
 import bicyclewatchdog.com.bicyclewatchdog.bluetooth_management.CustomBluetoothManager;
 
 /**
@@ -114,6 +116,9 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
      */
     protected void onLocChanged(Location location) {
         Log.e(TAG, "Telling BTmanager to search for device");
+        SharedPreferences preferences = context.getSharedPreferences(MyPreferences.NAME, Context.MODE_PRIVATE);
+        preferences.edit().putString(MyPreferences.KEY_LOCATION, location.toString()).apply();
+
         mBluetoothManager.findPairedDevice();
     }
 

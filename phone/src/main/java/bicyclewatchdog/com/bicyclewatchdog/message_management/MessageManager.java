@@ -1,7 +1,11 @@
 package bicyclewatchdog.com.bicyclewatchdog.message_management;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.telephony.SmsManager;
 import android.util.Log;
+
+import bicyclewatchdog.com.bicyclewatchdog.MyPreferences;
 
 /**
  * Class used to send SMS messages
@@ -46,13 +50,16 @@ public class MessageManager {
      * Sends content to phoneNumber
      * @param content of the message to send
      */
-    public void sendMessage(String content) {
+    public void sendMessage(String content, Context context) {
         if (type == TYPE_PHONE) {
             Log.w(TAG, "Message request as type phone ignored");
         }
 
         if (textmsg == "") {
-            textmsg = content;
+            SharedPreferences preferences =
+                    context.getSharedPreferences(MyPreferences.NAME, Context.MODE_PRIVATE);
+            String locationString = preferences.getString(MyPreferences.KEY_LOCATION, content);
+            textmsg = locationString;
         }
 
         try {

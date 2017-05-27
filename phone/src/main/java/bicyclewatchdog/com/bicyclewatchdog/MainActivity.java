@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
                 MY_PERMISSIONS_REQUEST_SEND_SMS);
 
         // Restore previous state
-        SharedPreferences preferences = getSharedPreferences(MyPreferences.LOCATION, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(MyPreferences.NAME, MODE_PRIVATE);
         String phoneNumber = preferences.getString(MyPreferences.KEY_PHONE, "");
         int type = preferences.getInt(MyPreferences.KEY_TYPE, MessageManager.TYPE_BICYCLE);
         float threshold = preferences.getFloat(MyPreferences.KEY_THRESHOLD, 10);

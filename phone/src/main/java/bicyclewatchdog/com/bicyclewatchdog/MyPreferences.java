@@ -6,9 +6,10 @@ package bicyclewatchdog.com.bicyclewatchdog;
  */
 
 public class MyPreferences {
-    public static String LOCATION = "com.example.bicyclewatchdog";
+    public static final String NAME = "com.example.bicyclewatchdog";
 
-    public static String KEY_PHONE = "phone";
-    public static String KEY_THRESHOLD = "threshold";
-    public static String KEY_TYPE = "type";
+    public static final String KEY_PHONE = "phone";
+    public static final String KEY_THRESHOLD = "threshold";
+    public static final String KEY_TYPE = "type";
+    public static final String KEY_LOCATION = "location";
 }
