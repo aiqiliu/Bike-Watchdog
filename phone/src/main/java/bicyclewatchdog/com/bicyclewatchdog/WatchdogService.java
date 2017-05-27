@@ -27,8 +27,8 @@ public class WatchdogService extends Service {
     public WatchdogService() {
         // Init managers
 //        btManager = new CustomBluetoothManager(getApplicationContext(), "asdf");
-//        mGpsManager = new GpsManager(btManager);
         messageManager = new MessageManager();
+
 
     }
 
@@ -37,7 +37,13 @@ public class WatchdogService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        if (mGpsManager == null) {
+            mGpsManager = new GpsManager(btManager, this.getApplication().getApplicationContext());
+            mGpsManager.resumeGPS();
+        }
+
         return mBinder;
+
     }
 
     @Override

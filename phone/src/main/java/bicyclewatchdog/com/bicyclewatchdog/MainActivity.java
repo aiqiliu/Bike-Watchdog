@@ -20,6 +20,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements WatchdogService.Callbacks {
     private static final String TAG = "MainActivity";
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
+    private static final int MY_PERMISSIONS_REQUEST_GPS = 1;
 
     // Reference to the service
     WatchdogService mService;
@@ -34,8 +35,10 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
         setContentView(R.layout.activity_main);
 
         ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.SEND_SMS},
+                new String[]{Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.INTERNET},
                 MY_PERMISSIONS_REQUEST_SEND_SMS);
+
 
         // Set the change listener for the radio group
         ((RadioGroup) this.findViewById(R.id.radioGroupType))
@@ -149,7 +152,11 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 }
+                break;
             }
+            case MY_PERMISSIONS_REQUEST_GPS:
+                Log.v(TAG, "GPS permission granted");
+                break;
         }
     }
 
