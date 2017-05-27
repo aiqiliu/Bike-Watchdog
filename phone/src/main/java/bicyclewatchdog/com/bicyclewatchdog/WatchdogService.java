@@ -26,7 +26,6 @@ public class WatchdogService extends Service {
 
     public WatchdogService() {
         // Init managers
-//        btManager = new CustomBluetoothManager(getApplicationContext(), "asdf");
         messageManager = new MessageManager();
 
 
@@ -75,6 +74,7 @@ public class WatchdogService extends Service {
      */
     public void updateThreshold(float threshold) {
         Log.v(TAG, "Updating threshold to " + Float.toString(threshold));
+        mGpsManager.updateThreshold(threshold);
         // TODO: call mGpsManager.updateThreshold(threshold);
     }
 
@@ -84,7 +84,12 @@ public class WatchdogService extends Service {
      */
     public void updateType(FunctionType type) {
         Log.v(TAG, "Updating type to " + type.toString());
-        // TODO: implement this
+        if (type == FunctionType.PHONE)
+            messageManager.setType(messageManager.TYPE_PHONE);
+        else if (type == FunctionType.BICYCLE)
+            messageManager.setType(messageManager.TYPE_BICYCLE);
+        else
+            Log.e(TAG, "Unrecognized type sent to updateType");
     }
 
     public void sendTestMessage(String phoneNumber) {
@@ -95,7 +100,7 @@ public class WatchdogService extends Service {
 
     public void updatePhone(String number) {
         Log.v(TAG, "Updating phone to " + number);
-        // TODO: implement updatePhone
+        messageManager.setPhoneNumber(number);
     }
 
     public enum FunctionType {
