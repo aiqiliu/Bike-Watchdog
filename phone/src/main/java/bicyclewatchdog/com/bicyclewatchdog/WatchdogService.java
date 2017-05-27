@@ -27,8 +27,7 @@ public class WatchdogService extends Service {
     public WatchdogService() {
         // Init managers
         messageManager = new MessageManager();
-
-
+        btManager = new CustomBluetoothManager(this, null);
     }
 
     //TODO: Start/stop gps based off instructions from MainActivity
@@ -42,7 +41,6 @@ public class WatchdogService extends Service {
         }
 
         return mBinder;
-
     }
 
     @Override

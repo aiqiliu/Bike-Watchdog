@@ -39,7 +39,7 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
         mBluetoothManager = btManager;
         mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
-        watchdogListener = new WatchdogListener(btManager);
+        watchdogListener = new WatchdogListener(this);
 
         mGoogleApiClient = new GoogleApiClient.Builder(context)
                 .addConnectionCallbacks(this)
@@ -59,16 +59,16 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
     public boolean resumeGPS() {
         if (!mGoogleApiClient.isConnected()) {
             Log.v(TAG, "Queuing up to resume");
+            shouldResume = true;
+            mGoogleApiClient.connect();
             return true;
-
         }
 
         try {
             // Create the location request
             LocationRequest mLocationRequest = LocationRequest.create()
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                    .setInterval(2 * 1000)
-                    .setFastestInterval(2000);
+                    .setSmallestDisplacement(threshold);
             // Request location updates
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
                     mLocationRequest, watchdogListener);
@@ -101,8 +101,10 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
      * @param newThreshold to listen for
      */
     public void updateThreshold(float newThreshold) {
-        //TODO: update this.threshold and reregister listener if needed
-        Log.e(TAG, "Not yet implemented");
+        Log.v(TAG, "Setting new threshold");
+        threshold = newThreshold;
+        pauseGPS();
+        resumeGPS();
     }
 
     /**
@@ -117,10 +119,14 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
         Log.e(TAG, "Not yet implemented");
     }
 
+
+
+    /* ************************** GOOGLE API CALLBACKS ******************************** */
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.v(TAG, "Successful connection to google api");
-        if (shouldResume || true) {
+        if (shouldResume) {
             Log.v(TAG, "Calling resumeGPS...");
             resumeGPS();
             shouldResume = false;

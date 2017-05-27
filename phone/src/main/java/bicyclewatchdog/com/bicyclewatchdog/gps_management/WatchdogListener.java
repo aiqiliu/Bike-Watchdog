@@ -5,26 +5,22 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 
-import bicyclewatchdog.com.bicyclewatchdog.bluetooth_management.CustomBluetoothManager;
-
 /**
  * Created by William on 4/22/2017
  */
 
-public class WatchdogListener implements LocationListener, com.google.android.gms.location.LocationListener {
+class WatchdogListener implements LocationListener, com.google.android.gms.location.LocationListener {
     private static final String TAG = "LocationListener";
-    private CustomBluetoothManager mBtManager;
+    private GpsManager gpsManager;
 
-    public WatchdogListener(CustomBluetoothManager btManager) {
-        mBtManager = btManager;
+    public WatchdogListener(GpsManager gpsManager) {
+        this.gpsManager = gpsManager;
     }
 
     @Override
     public void onLocationChanged(Location location) {
         Log.v(TAG, "Location changed! " + location.toString());
-
-        // Call bluetooth manager -- check for paired device.
-//        mBtManager.findPairedDevice();
+        gpsManager.onLocChanged(location);
     }
 
     @Override
