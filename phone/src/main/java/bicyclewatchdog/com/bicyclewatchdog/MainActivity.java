@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -14,8 +15,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import bicyclewatchdog.com.bicyclewatchdog.message_management.MessageManager;
 
 public class MainActivity extends AppCompatActivity implements WatchdogService.Callbacks {
     private static final String TAG = "MainActivity";
@@ -34,11 +38,30 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Request permissions
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.INTERNET,
                         Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN},
                 MY_PERMISSIONS_REQUEST_SEND_SMS);
+
+        // Restore previous state
+        SharedPreferences preferences = getSharedPreferences(MyPreferences.LOCATION, MODE_PRIVATE);
+        String phoneNumber = preferences.getString(MyPreferences.KEY_PHONE, "");
+        int type = preferences.getInt(MyPreferences.KEY_TYPE, MessageManager.TYPE_BICYCLE);
+        float threshold = preferences.getFloat(MyPreferences.KEY_THRESHOLD, 10);
+
+        ((EditText) this.findViewById(R.id.editTextPhone)).setText(phoneNumber);
+        ((EditText) this.findViewById(R.id.editTextThreshold)).setText(Float.toString(threshold));
+
+        switch (type) {
+            case MessageManager.TYPE_BICYCLE:
+                ((RadioButton) findViewById(R.id.radioButtonBike)).setChecked(true);
+                break;
+            case MessageManager.TYPE_PHONE:
+                ((RadioButton) findViewById(R.id.radioButtonPhone)).setChecked(true);
+                break;
+        }
 
 
         // Set the change listener for the radio group
@@ -103,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
         public void onFocusChange(View v, boolean hasFocus) {
             if (!hasFocus) {
                 // Focus lost on the threshold EditText. Update service
-                int threshold = Integer.parseInt(((EditText) v).getText().toString());
+                float threshold = Float.parseFloat(((EditText) v).getText().toString());
                 mService.updateThreshold(threshold);
             }
         }

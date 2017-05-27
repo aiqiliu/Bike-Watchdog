@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -37,16 +38,37 @@ public class WatchdogService extends Service {
         btManager = new CustomBluetoothManager(this);
     }
 
-
     @Override
-    public IBinder onBind(Intent intent) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.v(TAG, "Start command called");
+
         if (mGpsManager == null) {
             mGpsManager = new GpsManager(btManager, this.getApplication().getApplicationContext());
             mGpsManager.resumeGPS();
         }
-
         bluetoothReciever.register();
 
+        SharedPreferences preferences = getSharedPreferences(MyPreferences.LOCATION, MODE_PRIVATE);
+        String phoneNumber = preferences.getString(MyPreferences.KEY_PHONE, "");
+        int type = preferences.getInt(MyPreferences.KEY_TYPE, MessageManager.TYPE_BICYCLE);
+        float threshold = preferences.getFloat(MyPreferences.KEY_THRESHOLD, 10);
+
+        messageManager.setPhoneNumber(phoneNumber);
+        messageManager.setType(type);
+        mGpsManager.updateThreshold(threshold);
+
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.v(TAG, "Service destroyed");
+        bluetoothReciever.unregister();
+    }
+
+
+    @Override
+    public IBinder onBind(Intent intent) {
         return mBinder;
     }
 
@@ -123,7 +145,9 @@ public class WatchdogService extends Service {
     public void updateThreshold(float threshold) {
         Log.v(TAG, "Updating threshold to " + Float.toString(threshold));
         mGpsManager.updateThreshold(threshold);
-        // TODO: call mGpsManager.updateThreshold(threshold);
+
+        SharedPreferences preferences = getSharedPreferences(MyPreferences.LOCATION, MODE_PRIVATE);
+        preferences.edit().putFloat(MyPreferences.KEY_THRESHOLD, threshold).apply();
     }
 
     /**
@@ -133,12 +157,22 @@ public class WatchdogService extends Service {
      */
     public void updateType(FunctionType type) {
         Log.v(TAG, "Updating type to " + type.toString());
-        if (type == FunctionType.PHONE)
-            messageManager.setType(messageManager.TYPE_PHONE);
-        else if (type == FunctionType.BICYCLE)
-            messageManager.setType(messageManager.TYPE_BICYCLE);
-        else
-            Log.e(TAG, "Unrecognized type sent to updateType");
+        int intType;
+        switch (type) {
+            case PHONE:
+                intType = MessageManager.TYPE_PHONE;
+                break;
+            case BICYCLE:
+                intType = MessageManager.TYPE_BICYCLE;
+                break;
+            default:
+                Log.e(TAG, "Unrecognized type sent to updateType");
+                return;
+        }
+
+        messageManager.setType(intType);
+        SharedPreferences preferences = getSharedPreferences(MyPreferences.LOCATION, MODE_PRIVATE);
+        preferences.edit().putInt(MyPreferences.KEY_TYPE, intType).apply();
     }
 
     public void sendTestMessage(String phoneNumber) {
@@ -150,9 +184,12 @@ public class WatchdogService extends Service {
     public void updatePhone(String number) {
         Log.v(TAG, "Updating phone to " + number);
         messageManager.setPhoneNumber(number);
+
+        SharedPreferences preferences = getSharedPreferences(MyPreferences.LOCATION, MODE_PRIVATE);
+        preferences.edit().putString(MyPreferences.KEY_PHONE, number).apply();
     }
 
-    public enum FunctionType {
+    enum FunctionType {
         BICYCLE,
         PHONE,
         UNKNOWN
