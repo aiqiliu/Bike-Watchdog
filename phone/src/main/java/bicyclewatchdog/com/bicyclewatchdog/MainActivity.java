@@ -36,7 +36,8 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
 
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.INTERNET},
+                        Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.INTERNET,
+                        Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN},
                 MY_PERMISSIONS_REQUEST_SEND_SMS);
 
 

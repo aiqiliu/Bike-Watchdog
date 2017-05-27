@@ -1,6 +1,5 @@
 package bicyclewatchdog.com.bicyclewatchdog.bluetooth_management;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -8,10 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 
-import bicyclewatchdog.com.bicyclewatchdog.MainActivity;
 import bicyclewatchdog.com.bicyclewatchdog.gps_management.GpsManager;
 import bicyclewatchdog.com.bicyclewatchdog.message_management.MessageManager;
 
@@ -29,13 +26,16 @@ class FindPairedTask extends AsyncTask {
     private BluetoothAdapter mBluetoothAdapter;
     private GpsManager gps;
     private MessageManager msg;
+    private Context context;
 
-    public FindPairedTask(String targetMAC, Runnable onSuccess, Runnable onFailure, BluetoothAdapter BTA, GpsManager gpsman) {
+    public FindPairedTask(String targetMAC, Runnable onSuccess, Runnable onFailure,
+                          BluetoothAdapter BTA, GpsManager gpsman, Context context) {
         targetMac = targetMAC;
         mBluetoothAdapter = BTA;
         this.onSuccess = onSuccess;
         this.onFailure = onFailure;
         gps = gpsman;
+        this.context = context;
         Log.e(TAG, "Not yet implemented");
     }
 
@@ -69,7 +69,7 @@ class FindPairedTask extends AsyncTask {
         // Register for broadcasts when a device is discovered.
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        //applicationContext.registerReceiver(mReceiver, filter);
+        context.getApplicationContext().registerReceiver(mReceiver, filter);
 
         mBluetoothAdapter.startDiscovery();
         return null;
