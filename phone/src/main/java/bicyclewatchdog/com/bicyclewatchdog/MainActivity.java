@@ -50,9 +50,11 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
         String phoneNumber = preferences.getString(MyPreferences.KEY_PHONE, "");
         int type = preferences.getInt(MyPreferences.KEY_TYPE, MessageManager.TYPE_BICYCLE);
         float threshold = preferences.getFloat(MyPreferences.KEY_THRESHOLD, 10);
+        String mac = preferences.getString(MyPreferences.KEY_MAC, "");
 
         ((EditText) this.findViewById(R.id.editTextPhone)).setText(phoneNumber);
         ((EditText) this.findViewById(R.id.editTextThreshold)).setText(Float.toString(threshold));
+        ((EditText) this.findViewById(R.id.editTextMac)).setText(mac);
 
         switch (type) {
             case MessageManager.TYPE_BICYCLE:
@@ -75,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
         // Set the change listener for phone number
         this.findViewById(R.id.editTextPhone)
                 .setOnFocusChangeListener(phoneNumberChangedListener);
+
+        // Set the change listener for mac address
+        this.findViewById(R.id.editTextMac)
+                .setOnFocusChangeListener(macChangedListener);
 
         Intent serviceIntent = new Intent(this, WatchdogService.class);
         startService(serviceIntent);
@@ -128,6 +134,20 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
                 // Focus lost on the threshold EditText. Update service
                 float threshold = Float.parseFloat(((EditText) v).getText().toString());
                 mService.updateThreshold(threshold);
+            }
+        }
+    };
+
+    /**
+     * Listener to handle changes of the focus on editTextMac
+     */
+    private View.OnFocusChangeListener macChangedListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (!hasFocus) {
+                // Focus lost on the threshold EditText. Update service
+                String mac = ((EditText) v).getText().toString();
+                mService.updateMac(mac);
             }
         }
     };

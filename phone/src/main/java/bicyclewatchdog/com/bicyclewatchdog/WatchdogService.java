@@ -18,7 +18,7 @@ import bicyclewatchdog.com.bicyclewatchdog.message_management.MessageManager;
 
 public class WatchdogService extends Service {
     private static final String TAG = "WatchdogService";
-    private final float DEFAULT_THRESHOLD = 100; // Default to 100 meter change
+    private final float DEFAULT_THRESHOLD = 10; // Default to 100 meter change
 
     // Activity reference for updating UI
     Callbacks activity;
@@ -51,11 +51,13 @@ public class WatchdogService extends Service {
         SharedPreferences preferences = getSharedPreferences(MyPreferences.NAME, MODE_PRIVATE);
         String phoneNumber = preferences.getString(MyPreferences.KEY_PHONE, "");
         int type = preferences.getInt(MyPreferences.KEY_TYPE, MessageManager.TYPE_BICYCLE);
-        float threshold = preferences.getFloat(MyPreferences.KEY_THRESHOLD, 10);
+        float threshold = preferences.getFloat(MyPreferences.KEY_THRESHOLD, DEFAULT_THRESHOLD);
+        String mac = preferences.getString(MyPreferences.KEY_MAC, "");
 
         messageManager.setPhoneNumber(phoneNumber);
         messageManager.setType(type);
         mGpsManager.updateThreshold(threshold);
+        targetMac = mac;
 
         return START_STICKY;
     }
@@ -187,6 +189,14 @@ public class WatchdogService extends Service {
 
         SharedPreferences preferences = getSharedPreferences(MyPreferences.NAME, MODE_PRIVATE);
         preferences.edit().putString(MyPreferences.KEY_PHONE, number).apply();
+    }
+
+    public void updateMac(String mac) {
+        Log.v(TAG, "Updating mac address to " + mac);
+        targetMac = mac;
+
+        SharedPreferences preferences = getSharedPreferences(MyPreferences.NAME, MODE_PRIVATE);
+        preferences.edit().putString(MyPreferences.KEY_MAC, mac).apply();
     }
 
     enum FunctionType {

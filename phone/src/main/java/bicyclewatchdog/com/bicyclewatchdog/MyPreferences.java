@@ -12,4 +12,5 @@ public class MyPreferences {
     public static final String KEY_THRESHOLD = "threshold";
     public static final String KEY_TYPE = "type";
     public static final String KEY_LOCATION = "location";
+    public static final String KEY_MAC = "mac";
 }

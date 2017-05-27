@@ -132,12 +132,19 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"/>
 
-    <Button
-        android:id="@+id/buttonPair"
+    <!--<Button-->
+        <!--android:id="@+id/buttonPair"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:onClick="onPairClicked"-->
+        <!--android:text="@string/pair_button_text"/>-->
+
+    <EditText
+        android:id="@+id/editTextMac"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="onPairClicked"
-        android:text="@string/pair_button_text"/>
+        android:hint="@string/mac_address"
+        />
 
     <Space
         android:layout_width="wrap_content"

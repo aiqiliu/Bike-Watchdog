@@ -10,4 +10,5 @@
     <string name="pair_button_text">Pair</string>
     <string name="app_function">App function:</string>
     <string name="send_message_text">Send message</string>
+    <string name="mac_address">Mac address</string>
 </resources>
