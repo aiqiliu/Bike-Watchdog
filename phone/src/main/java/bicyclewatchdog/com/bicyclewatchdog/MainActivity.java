@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
         SharedPreferences preferences = getSharedPreferences(MyPreferences.NAME, MODE_PRIVATE);
         String phoneNumber = preferences.getString(MyPreferences.KEY_PHONE, "");
         int type = preferences.getInt(MyPreferences.KEY_TYPE, MessageManager.TYPE_BICYCLE);
-        float threshold = preferences.getFloat(MyPreferences.KEY_THRESHOLD, 10);
+        float threshold = preferences.getFloat(MyPreferences.KEY_THRESHOLD, 50);
         String mac = preferences.getString(MyPreferences.KEY_MAC, "");
 
         ((EditText) this.findViewById(R.id.editTextPhone)).setText(phoneNumber);
