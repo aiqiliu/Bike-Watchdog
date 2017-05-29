@@ -33,7 +33,7 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
     private boolean shouldResume = false;
     private Context context;
     private CustomBluetoothManager mBluetoothManager;
-    private long interval = java.util.concurrent.TimeUnit.MINUTES.toMillis(1);
+    private long interval = java.util.concurrent.TimeUnit.MINUTES.toMillis(2);
 
     /**
      * Initializes GpsManager to update only when threshold is passed
