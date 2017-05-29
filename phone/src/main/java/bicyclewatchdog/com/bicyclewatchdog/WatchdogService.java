@@ -43,7 +43,8 @@ public class WatchdogService extends Service {
         Log.v(TAG, "Start command called");
 
         if (mGpsManager == null) {
-            mGpsManager = new GpsManager(btManager, this.getApplication().getApplicationContext());
+            mGpsManager = new GpsManager(btManager, this.getApplication().getApplicationContext(),
+                    messageManager);
             mGpsManager.resumeGPS();
         }
         bluetoothReciever.register();

@@ -43,7 +43,7 @@ public class MessageManager {
      * @param location of the gps coordinates
      */
     public void setTextMsg(String location) {
-        textmsg = "Bike location at: " + location;
+        textmsg = location;
     }
 
     /**

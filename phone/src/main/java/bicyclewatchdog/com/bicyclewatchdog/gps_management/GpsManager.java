@@ -17,6 +17,7 @@ import com.google.android.gms.location.LocationServices;
 
 import bicyclewatchdog.com.bicyclewatchdog.MyPreferences;
 import bicyclewatchdog.com.bicyclewatchdog.bluetooth_management.CustomBluetoothManager;
+import bicyclewatchdog.com.bicyclewatchdog.message_management.MessageManager;
 
 /**
  * Created by William on 4/22/2017
@@ -27,6 +28,7 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
     private LocationManager mLocationManager;
     private WatchdogListener watchdogListener;
     private GoogleApiClient mGoogleApiClient;
+    private MessageManager messageManager;
     private float threshold = Float.MAX_VALUE;
     private boolean shouldResume = false;
     private Context context;
@@ -38,10 +40,11 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
      *
      * @param btManager for use in onLocChanged()
      */
-    public GpsManager(CustomBluetoothManager btManager, Context c) {
+    public GpsManager(CustomBluetoothManager btManager, Context c, MessageManager messageManager) {
         context = c;
         mBluetoothManager = btManager;
         mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        this.messageManager = messageManager;
 
         watchdogListener = new WatchdogListener(this);
 
@@ -72,8 +75,8 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
             // Create the location request
             LocationRequest mLocationRequest = LocationRequest.create()
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                    .setSmallestDisplacement(threshold);
-//                    .setInterval(interval);
+                    .setSmallestDisplacement(threshold)
+                    .setInterval(interval);
             // Request location updates
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
                     mLocationRequest, watchdogListener);
@@ -129,12 +132,19 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
         String locationString = "Your bicycle has moved! Location: " +
                 Double.toString(location.getLatitude()) + ", " + Double.toString(location.getLongitude());
 
+        Log.v(TAG, "Previous: " + lastLoc);
+        Log.v(TAG, "Current: " + locationString);
+
+
         // Only update if the strings are not equal
         if (!lastLoc.equals(locationString)) {
-            preferences.edit().putString(MyPreferences.KEY_LOCATION, locationString).apply();
+            preferences.edit().putString(MyPreferences.KEY_LOCATION, locationString).commit();
+
+            messageManager.setTextMsg(locationString);
 
             Toast.makeText(context, "GPS changed", Toast.LENGTH_SHORT).show();
             mBluetoothManager.findPairedDevice();
+
         } else {
             Log.v(TAG, "Location didn't actually change...");
         }
