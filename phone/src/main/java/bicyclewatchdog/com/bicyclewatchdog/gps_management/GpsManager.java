@@ -72,8 +72,8 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
             // Create the location request
             LocationRequest mLocationRequest = LocationRequest.create()
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                    .setSmallestDisplacement(threshold)
-                    .setInterval(interval);
+                    .setSmallestDisplacement(threshold);
+//                    .setInterval(interval);
             // Request location updates
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
                     mLocationRequest, watchdogListener);
