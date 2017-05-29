@@ -124,7 +124,8 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
     protected void onLocChanged(Location location) {
         Log.e(TAG, "Telling BTmanager to search for device");
         SharedPreferences preferences = context.getSharedPreferences(MyPreferences.NAME, Context.MODE_PRIVATE);
-        String locationString = Double.toString(location.getLatitude()) + ", " + Double.toString(location.getLongitude());
+        String locationString = "Your bicycle has moved! Location: " +
+                Double.toString(location.getLatitude()) + ", " + Double.toString(location.getLongitude());
         preferences.edit().putString(MyPreferences.KEY_LOCATION, locationString).apply();
 
 
