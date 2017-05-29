@@ -106,11 +106,15 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
      * @param newThreshold to listen for
      */
     public void updateThreshold(float newThreshold) {
-        Log.v(TAG, "Setting new threshold");
-        threshold = newThreshold;
-        pauseGPS();
-        resumeGPS();
+        if (newThreshold != threshold) {
+            Log.v(TAG, "Setting new threshold");
+            threshold = newThreshold;
+            pauseGPS();
+            resumeGPS();
+        }
     }
+
+    public float getThreshold() {return threshold;}
 
     /**
      * Called when threshold is met, searches for paired device.
@@ -120,7 +124,8 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
     protected void onLocChanged(Location location) {
         Log.e(TAG, "Telling BTmanager to search for device");
         SharedPreferences preferences = context.getSharedPreferences(MyPreferences.NAME, Context.MODE_PRIVATE);
-        preferences.edit().putString(MyPreferences.KEY_LOCATION, location.toString()).apply();
+        String locationString = Double.toString(location.getLatitude()) + ", " + Double.toString(location.getLongitude());
+        preferences.edit().putString(MyPreferences.KEY_LOCATION, locationString).apply();
 
 
         Toast.makeText(context, "GPS changed", Toast.LENGTH_SHORT).show();
