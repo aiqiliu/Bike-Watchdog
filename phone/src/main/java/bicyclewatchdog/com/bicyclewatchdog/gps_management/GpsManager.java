@@ -124,13 +124,20 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
     protected void onLocChanged(Location location) {
         Log.e(TAG, "Telling BTmanager to search for device");
         SharedPreferences preferences = context.getSharedPreferences(MyPreferences.NAME, Context.MODE_PRIVATE);
+
+        String lastLoc = preferences.getString(MyPreferences.KEY_LOCATION, "");
         String locationString = "Your bicycle has moved! Location: " +
                 Double.toString(location.getLatitude()) + ", " + Double.toString(location.getLongitude());
-        preferences.edit().putString(MyPreferences.KEY_LOCATION, locationString).apply();
 
+        // Only update if the strings are not equal
+        if (!lastLoc.equals(locationString)) {
+            preferences.edit().putString(MyPreferences.KEY_LOCATION, locationString).apply();
 
-        Toast.makeText(context, "GPS changed", Toast.LENGTH_SHORT).show();
-        mBluetoothManager.findPairedDevice();
+            Toast.makeText(context, "GPS changed", Toast.LENGTH_SHORT).show();
+            mBluetoothManager.findPairedDevice();
+        } else {
+            Log.v(TAG, "Location didn't actually change...");
+        }
     }
 
 
