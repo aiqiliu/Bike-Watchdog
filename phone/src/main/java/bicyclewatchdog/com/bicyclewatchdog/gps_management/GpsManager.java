@@ -34,7 +34,7 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
     private boolean shouldResume = false;
     private Context context;
     private CustomBluetoothManager mBluetoothManager;
-    private long interval = java.util.concurrent.TimeUnit.MINUTES.toMillis(2);
+    private long interval = java.util.concurrent.TimeUnit.MINUTES.toMillis(1);
 
     private LocationManager locationManager;
 
@@ -84,8 +84,10 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
         Criteria criteria = new Criteria();
         try {
             criteria.setAccuracy(Criteria.ACCURACY_HIGH);
+            Log.v(TAG, "GPS permissions granted.");
         } catch (IllegalArgumentException e) {
             criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+            Log.v(TAG, "GPS permissions not granted");
         }
 
         String provider = locationManager.getBestProvider(criteria, true);
