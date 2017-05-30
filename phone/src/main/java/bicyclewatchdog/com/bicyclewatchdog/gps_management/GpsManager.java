@@ -1,19 +1,21 @@
 package bicyclewatchdog.com.bicyclewatchdog.gps_management;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 
 import bicyclewatchdog.com.bicyclewatchdog.MyPreferences;
 import bicyclewatchdog.com.bicyclewatchdog.bluetooth_management.CustomBluetoothManager;
@@ -27,13 +29,14 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
     private static final String TAG = "GpsManager";
     private LocationManager mLocationManager;
     private WatchdogListener watchdogListener;
-    private GoogleApiClient mGoogleApiClient;
     private MessageManager messageManager;
     private float threshold = Float.MAX_VALUE;
     private boolean shouldResume = false;
     private Context context;
     private CustomBluetoothManager mBluetoothManager;
     private long interval = java.util.concurrent.TimeUnit.MINUTES.toMillis(2);
+
+    private LocationManager locationManager;
 
     /**
      * Initializes GpsManager to update only when threshold is passed
@@ -48,14 +51,28 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
 
         watchdogListener = new WatchdogListener(this);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(context)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
+        locationManager = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
 
-        mGoogleApiClient.connect();
+        Criteria criteria = new Criteria();
+        try {
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        } catch (IllegalArgumentException e) {
+            criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        }
 
+        String provider = locationManager.getBestProvider(criteria, true);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            Log.e(TAG, "Permissions not granted for GPS");
+        } else {
+            locationManager.requestLocationUpdates(provider, interval, threshold, watchdogListener);
+        }
     }
 
     /**
@@ -64,28 +81,28 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
      * @return true if success, false if failure
      */
     public boolean resumeGPS() {
-        if (!mGoogleApiClient.isConnected()) {
-            Log.v(TAG, "Queuing up to resume");
-            shouldResume = true;
-            mGoogleApiClient.connect();
-            return true;
-        }
-
+        Criteria criteria = new Criteria();
         try {
-            // Create the location request
-            LocationRequest mLocationRequest = LocationRequest.create()
-                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                    .setSmallestDisplacement(threshold)
-                    .setInterval(interval);
-            // Request location updates
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
-                    mLocationRequest, watchdogListener);
-            return true;
-        } catch (SecurityException e) {
-            e.printStackTrace();
-            return false;
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        } catch (IllegalArgumentException e) {
+            criteria.setAccuracy(Criteria.ACCURACY_COARSE);
         }
 
+        String provider = locationManager.getBestProvider(criteria, true);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            Log.e(TAG, "Permissions not granted for GPS");
+            return false;
+        } else {
+            locationManager.requestLocationUpdates(provider, interval, threshold, watchdogListener);
+            return true;
+        }
     }
 
     /**
@@ -94,13 +111,8 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
      * @return true if success, false if failure
      */
     public boolean pauseGPS() {
-        try {
-            mLocationManager.removeUpdates(watchdogListener);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        locationManager.removeUpdates(watchdogListener);
+        return true;
     }
 
     /**
