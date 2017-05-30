@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements WatchdogService.C
             }
             case MY_PERMISSIONS_REQUEST_GPS:
                 Log.v(TAG, "GPS permission granted");
+                mService.refreshGps();
                 break;
         }
     }

@@ -212,6 +212,11 @@ public class WatchdogService extends Service {
         preferences.edit().putString(MyPreferences.KEY_MAC, mac).apply();
     }
 
+    public void refreshGps() {
+        mGpsManager.pauseGPS();
+        mGpsManager.resumeGPS();
+    }
+
     enum FunctionType {
         BICYCLE,
         PHONE,

@@ -55,7 +55,7 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
 
         Criteria criteria = new Criteria();
         try {
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+            criteria.setAccuracy(Criteria.ACCURACY_HIGH);
         } catch (IllegalArgumentException e) {
             criteria.setAccuracy(Criteria.ACCURACY_COARSE);
         }
@@ -83,7 +83,7 @@ public class GpsManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
     public boolean resumeGPS() {
         Criteria criteria = new Criteria();
         try {
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+            criteria.setAccuracy(Criteria.ACCURACY_HIGH);
         } catch (IllegalArgumentException e) {
             criteria.setAccuracy(Criteria.ACCURACY_COARSE);
         }
